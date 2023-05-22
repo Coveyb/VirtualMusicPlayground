@@ -1,3 +1,7 @@
+import { removeInstrument } from "../instrument-manager.js";
+
+
+// creates the cubes used by the sequencer
 function createCubes(el) {
   const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
   const cubeSize = 0.5;
@@ -52,7 +56,8 @@ function createCubes(el) {
 
         const sequencer = el;
         const currentPattern = sequencer.components.sequencer.currentPattern;
-
+        
+        //set current seq data
         sequencer.components.sequencer.data.sequence[currentPattern][row][
           step
         ] = isActive ? 0 : 1;
@@ -63,8 +68,8 @@ function createCubes(el) {
     }
   }
 
-  // create planes for pattern bank buttons as well as play and stop buttons
-  function createPlane(xPosition, color, index, loadPatternFunction) {
+  // create planes for pattern bank buttons as well as play and stop buttons and remove button
+  function createButtons(xPosition, color, index, loadPatternFunction) {
     const pattern = document.createElement("a-plane");
     pattern.setAttribute("position", `${xPosition} 0 0`);
     pattern.setAttribute("height", 0.6);
@@ -81,9 +86,9 @@ function createCubes(el) {
 
   const positions = [2.5, 0.83, -0.83, -2.5];
   const parentEntity = document.createElement("a-entity");
-
+  // creating pattern banks
   positions.forEach((pos, index) => {
-    const pattern = createPlane(
+    const pattern = createButtons(
       pos,
       colors[index],
       index,
@@ -102,8 +107,8 @@ function createCubes(el) {
   
   const playStopButtonText = document.createElement("a-text");
 playStopButtonText.setAttribute("value", "Play/Stop");
-playStopButtonText.setAttribute("position", "0 -0.015 0.3");
-   playStopButtonText.setAttribute("color", "black");
+  playStopButtonText.setAttribute("position", "0 -0.015 0.3");
+ playStopButtonText.setAttribute("color", "black");
 playStopButtonText.setAttribute("align", "center");
 
 playStopButton.appendChild(playStopButtonText);
@@ -127,7 +132,6 @@ playStopButton.appendChild(playStopButtonText);
   const playStopAllButtonText = document.createElement("a-text");
 playStopAllButtonText.setAttribute("value", "Play/Stop All");
 playStopAllButtonText.setAttribute("position", "0 -0.015 0.3");
-  
   playStopAllButtonText.setAttribute("color", "black");
 playStopAllButtonText.setAttribute("align", "center");
 
@@ -140,6 +144,33 @@ playStopAllButton.appendChild(playStopAllButtonText);
       this.el.sceneEl.emit("stopAllSequencers");
     }
   });
+  
+  
+  
+    const removeInstrumentButton = document.createElement("a-box");
+  removeInstrumentButton.setAttribute("class", "clickable");
+  removeInstrumentButton.setAttribute("position", "4.2 0.8 0");
+  removeInstrumentButton.setAttribute("width", "0.5");
+  removeInstrumentButton.setAttribute("depth", "0.2");
+  removeInstrumentButton.setAttribute("height", "0.5");
+    removeInstrumentButton.setAttribute("color", "red");
+
+
+  const removeInstrumentButtonText = document.createElement("a-text");
+  removeInstrumentButtonText.setAttribute("value", "X");
+  removeInstrumentButtonText.setAttribute("position", "0 -0.015 0.2");
+  removeInstrumentButtonText.setAttribute("color", "white");
+  removeInstrumentButtonText.setAttribute("align", "center");
+
+  removeInstrumentButton.appendChild(removeInstrumentButtonText);
+    parentEntity.appendChild(removeInstrumentButton);
+
+  removeInstrumentButton.addEventListener("click", () => {
+    removeInstrument(this.el.id)
+  });
+  
+  
+  
   parentEntity.appendChild(playStopAllButton);
 
   el.appendChild(parentEntity);
@@ -147,9 +178,14 @@ playStopAllButton.appendChild(playStopAllButtonText);
   parentEntity.setAttribute("rotation", "17 0 0");
 }
 
+
+
+
+
+
 AFRAME.registerComponent("sequencer", {
   schema: {
-    bpm: { default: 120, type: "number" },
+    bpm: { default: Tone.Transport.bpm.value, type: "number" },
     sequence: {
       default: Array(4).fill(Array(8).fill(Array(16).fill(0))),
       type: "array",
@@ -158,6 +194,7 @@ AFRAME.registerComponent("sequencer", {
   },
 
   init: function () {
+    // this prevents the audio from being disabled by browsers, there must be a click registered before sound is played
     window.addEventListener("click", () => {
       Tone.start();
     });
@@ -209,16 +246,16 @@ AFRAME.registerComponent("sequencer", {
       }
     });
   },
-
+// plays the programmed sequence 
   playSequence: function () {
     if (!this.seqPlaying) return;
 
+    // play the current pattern selected from the pattern banks
     const currentPattern = this.currentPattern;
     const sequence = this.data.sequence[currentPattern];
 
     // update the color and play notes for the current step's cubes
     const currentStep = this.currentStep;
-
     for (let row = 0; row < sequence.length; row++) {
       const isActive = sequence[row][currentStep] === 1;
       const note = this.el.querySelector(
@@ -235,8 +272,12 @@ AFRAME.registerComponent("sequencer", {
 
       const noteName = note.getAttribute("data-note");
 
+      // if the note is active (selected) then emit the note, 
       if (isActive) {
+        // velocityOffset humanises the velocity by randomising the value slightly 
         const velocityOffset = Math.random() * 0.2;
+        
+        // note duration is used by setTimeout to emit the note off and determines the length of each note
         const noteDuration = (60 / this.data.bpm) * 1000 * 0.25;
 
         this.el.emit("noteOn", {
@@ -250,7 +291,7 @@ AFRAME.registerComponent("sequencer", {
       }
     }
 
-    // Update the color of the previous step's cubes back to their original state
+    // update the color of the previous step's cubes back to their original state
     const prevStep = this.currentStep === 0 ? 15 : this.currentStep - 1;
     const prevCubes = this.el.querySelectorAll(`[data-step="${prevStep}"]`);
 
@@ -271,7 +312,7 @@ AFRAME.registerComponent("sequencer", {
 
     // call the playSequence function again after a certain delay
     const secondsPerBeat = 60 / this.data.bpm; // Duration of a beat in seconds
-    const secondsPerStep = secondsPerBeat / 4; // Duration of a step in seconds
+    const secondsPerStep = secondsPerBeat / 4; // duration of a step in seconds
 
     setTimeout(() => {
       this.playSequence();
@@ -287,7 +328,7 @@ AFRAME.registerComponent("sequencer", {
       cube.setAttribute("color", "gray");
     });
 
-    // Set the current pattern based on the provided pattern number
+    // set the current pattern based on the provided pattern number
     this.currentPattern = patternNumber;
 
     const sequence = this.data.sequence[this.currentPattern];
@@ -308,12 +349,12 @@ AFRAME.registerComponent("sequencer", {
         }
       }
     }
-    // Start the Tone.Transport to play the loaded pattern
+    // start the Tone.Transport to play the loaded pattern
     Tone.Transport.start();
   },
 
   runLightShow: function () {
-    // Set up variables for the light show
+    // set up variables for the light show
     const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
     const origin = { x: 7.5, y: 3.5 };
     const maxDistance = Math.sqrt(
@@ -322,9 +363,9 @@ AFRAME.registerComponent("sequencer", {
     let hue = 0;
     let outwards = true;
 
-    // Start the interval for the light show
+    // start the interval for the light show
     this.lightShowInterval = setInterval(() => {
-      // Check if the sequence is already playing or a pattern is loaded, stop the light show and start playing the sequence
+      // Cceck if the sequence is already playing or a pattern is loaded, stop the light show and start playing the sequence
       if (this.seqPlaying || this.currentPattern !== -1) {
         this.stopLightShow();
         this.seqPlaying = true;
@@ -332,7 +373,7 @@ AFRAME.registerComponent("sequencer", {
         return;
       }
 
-      // Update the color of each cube based on its distance from the origin
+      // update the color of each cube based on its distance from the origin
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 16; col++) {
           let distance = Math.sqrt(
@@ -368,11 +409,13 @@ AFRAME.registerComponent("sequencer", {
         });
       }, 9000);
 
-      // Toggle the direction of the light show animation
+      // alternate the direction of the light show animation
       outwards = !outwards;
     }, (60 / this.data.bpm) * 10000);
   },
 
+  
+  // stops the light show, so the sequencer can be used 
   stopLightShow: function () {
     if (this.lightShowInterval) {
       clearInterval(this.lightShowInterval);

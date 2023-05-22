@@ -27,6 +27,8 @@ AFRAME.registerComponent("synth", {
   },
 
   init: function () {
+    
+    //create the synthm, then the filter, then chain them together to send them to the master output
     this.createSynth();
     this.createFilter();
     this.synth.chain(this.filter, Tone.Destination);
@@ -156,6 +158,8 @@ AFRAME.registerComponent("synth", {
     this.synth.connect(effect);
   },
 
+  
+  // loads a new preset from the presets.js file
   updatePreset: function (presetKey) {
     const newPreset = presets[presetKey];
     if (!newPreset) {
@@ -163,18 +167,18 @@ AFRAME.registerComponent("synth", {
       return;
     }
 
-    // Iterate over each property in the new preset
+    // update each value using the for loop, calling updateProprty each time
     for (const propertyName in newPreset) {
       const propertyValue = newPreset[propertyName];
 
-      // Use your existing function to update the property
+      
       this.updateProperty(propertyName, propertyValue);
     }
   },
 
   updateSynthType: function (newSynthType) {
     this.data.synthType = newSynthType;
-    this.updateSynth(); // Assuming this function recreates the synth with the new type
+    this.updateSynth(); 
   },
 
   updateOscillatorType: function (newOscillatorType) {
@@ -275,6 +279,8 @@ AFRAME.registerComponent("synth", {
     this.synth.set({ modulationEnvelope: { release: newModulationRelease } });
   },
 
+  
+  // update property by taking propertyName, using the map to find the update function and using the propertyValue in the updatefunction 
   updateProperty: function (propertyName, propertyValue) {
     const propertyMap = {
       synthType: { dataKey: "synthType", updateFunc: this.updateSynth },
@@ -347,6 +353,7 @@ AFRAME.registerComponent("synth", {
     }
   },
   
+  // getter for tone.js synth
   getSynth: function () {
     return this.synth;
   },

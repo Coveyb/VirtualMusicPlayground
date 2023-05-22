@@ -2,7 +2,6 @@ import { createButton, createMenuButtons } from "../utils/menu-utils.js";
 import { updateAndShowText } from "../utils/ui-utils.js";
 import { removeInstrument } from "../instrument-manager.js";
 
-
 // constants for calculating musical notes
 const OCTAVE = 12;
 const MAJOR_THIRD = 4;
@@ -56,7 +55,7 @@ function noteIntegerToString(noteInt) {
     "B",
   ];
 
-  const octave = Math.floor((noteInt - OCTAVE) / OCTAVE);
+  const octave = Math.floor(noteInt / OCTAVE);
   const noteName = noteNames[noteInt % OCTAVE];
 
   return noteName + octave;
@@ -83,6 +82,7 @@ AFRAME.registerComponent("virtual-keyboard", {
     isChordMode: { default: false },
     isMotionControl: { default: false },
     is7thChord: { default: false },
+    arpOctave: { default: false},
     currentlyPressedChord: { default: [] },
   },
 
@@ -93,19 +93,29 @@ AFRAME.registerComponent("virtual-keyboard", {
     this.chordModeChord = null;
     this.arpeggiatorInterval = null;
 
+    
+    
     this.keyboardButtons = [
       {
-        id: "unsure",
+        id: "arpOctave",
 
-        width: "0.22",
-        height: "0.22",
+        width: "0.35",
+        height: "0.35",
         depth: "0.8",
         color: "#D3D3D3",
         wireframe: "true",
         textColor: "black",
+        text: "Arp + 1\nOctave",
+          secondaryText: "",
         textWidth: "1",
         textZOffset: "0.03",
-        callback: () => {},
+        callback: () => {
+          this.data.arpOctave = toggleButtonColor(
+            event,
+            this.data.arpOctave,
+            "green"
+          );
+        },
       },
       {
         id: "chordMode",
@@ -118,6 +128,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         textColor: "black",
         textWidth: "1",
         textZOffset: "0.03",
+        text: "Chord Mode",
+          secondaryText: "",
         wireframe: "true",
 
         callback: () => {
@@ -138,6 +150,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         wireframe: "true",
         textColor: "black",
         textWidth: "1",
+        text: "7th Chord Mode",
+          secondaryText: "",
         textZOffset: "0.03",
         callback: () => {
           this.data.is7thChord = toggleButtonColor(
@@ -159,6 +173,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         textZOffset: "0.03",
         wireframe: "true",
         class: "clickable",
+        text: "Arpeggiator",
+          secondaryText: "",
 
         callback: () => {
           this.data.isArpeggiating = toggleButtonColor(
@@ -166,7 +182,7 @@ AFRAME.registerComponent("virtual-keyboard", {
             this.data.isArpeggiating,
             "pink"
           );
-          console.log(this.data.isArpeggiating);
+          
         },
       },
       {
@@ -177,10 +193,12 @@ AFRAME.registerComponent("virtual-keyboard", {
         depth: "0.005",
         color: "#D3D3D3",
         textColor: "black",
+        text: "Remove Keyboard",
+          secondaryText: "",
         textWidth: "1",
         textZOffset: "0.03",
         callback: () => {
-          removeInstrument(this.el.getAttribute("id"))
+          removeInstrument(this.el.id);
         },
       },
       {
@@ -191,6 +209,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         depth: "0.005",
         color: "#D3D3D3",
         textColor: "black",
+        text: "Transpose Key Up",
+          secondaryText: "",
         textWidth: "1",
         textZOffset: "0.03",
         callback: () => {
@@ -208,6 +228,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         color: "#D3D3D3",
         textColor: "black",
         textWidth: "1",
+        text: "Motion Control Mode",
+          secondaryText: "",
         textZOffset: "0.03",
         callback: () => {
           this.data.isMotionControl = toggleButtonColor(
@@ -226,6 +248,8 @@ AFRAME.registerComponent("virtual-keyboard", {
         color: "#D3D3D3",
         textColor: "black",
         textWidth: "1",
+        text: "Transpose Key Down",
+          secondaryText: "",
         textZOffset: "0.03",
         callback: () => {
           this.cycleKey("down");
@@ -294,11 +318,9 @@ AFRAME.registerComponent("virtual-keyboard", {
       } else if (this.data.isArpeggiating && !this.arpeggiatorStarted) {
         this.arpeggiatorStarted = true;
         this.arpeggiateChord();
-       
       }
     } else {
       if (this.rightTriggerPressed) {
-      
         // add animations only if they don't exist
         if (!sphere.hasAttribute("animation")) {
           const interval = Tone.Time("8n").toSeconds();
@@ -328,7 +350,6 @@ AFRAME.registerComponent("virtual-keyboard", {
           }
         }
       } else if (this.leftTriggerPressed) {
-        
         // add animations only if they don't exist
         if (!sphere.hasAttribute("animation")) {
           const interval = Tone.Time("8n").toSeconds();
@@ -398,14 +419,17 @@ AFRAME.registerComponent("virtual-keyboard", {
     }
   },
 
-  arpeggiateChord: function (speed = "8n", octaveRange = 1) {
+  arpeggiateChord: function (speed = "8n") {
     Tone.Transport.start();
-    console.log("ARPEGGIATING CHORD");
+    let octaveRange = 1;
+   if (this.data.arpOctave == true) {
+     octaveRange = 2;
+   }
     const interval = Tone.Time(speed).toSeconds();
-    const noteGap = 0.125; // Gap between notes in seconds
+    const noteGap = 0.125; // gap between notes in seconds
     let index = 0;
 
-    // Create an extended chord array with multiple octaves
+    // create an extended chord array with multiple octaves
     let extendedChord = [];
     for (let i = 0; i < octaveRange; i++) {
       this.data.currentlyPressedChord.forEach((note) => {
@@ -513,8 +537,6 @@ AFRAME.registerComponent("virtual-keyboard", {
       color: "black",
     });
 
-   
-
     let buttonContainer = document.createElement("a-entity");
 
     buttonContainer.setAttribute(
@@ -553,7 +575,6 @@ AFRAME.registerComponent("virtual-keyboard", {
       this.el.appendChild(sphere);
       this.el.appendChild(cube);
 
-      
       this.cubes.push(sphere);
     }
     this.updateKey();
@@ -565,7 +586,7 @@ AFRAME.registerComponent("virtual-keyboard", {
     for (let i = 0; i < 7; i++) {
       let cube = this.cubes[i];
       let note = this.data.rootNote + notesInKey[i];
-      let noteName = this.getNoteName(note);
+      let noteName = noteIntegerToString(note);
       cube.setAttribute("note", noteName);
 
       console.log("update key: " + noteName);
@@ -644,47 +665,26 @@ AFRAME.registerComponent("virtual-keyboard", {
     }
   },
 
-  getNoteName: function (midiNumber) {
-    const octave = Math.floor((midiNumber + OCTAVE) / OCTAVE) - 1;
-    const note = midiNumber % OCTAVE;
-    const noteNames = [
-      "C",
-      "C#",
-      "D",
-      "D#",
-      "E",
-      "F",
-      "F#",
-      "G",
-      "G#",
-      "A",
-      "A#",
-      "B",
-    ];
-
-    return noteNames[note] + octave;
-  },
   //rotate the right controller while plaing a note to affect the filter on the synth with motion
-    // This function will be called when the controller is rotated
+  // This function will be called when the controller is rotated
   onAxisMove: function () {
     if (!this.rightTriggerPressed || !this.data.isMotionControl) {
       return;
     }
-  
+
     // calculate the filter frequency based on the controller rotation
     const rotation = this.rightController.object3D.rotation;
     const filterFrequency = this.calculateFilterFrequency(rotation);
 
-    
     const synthComponent = this.el.components.synth;
-    
+
     // update the filter frequency directly
     synthComponent.updateProperty("filterFrequency", filterFrequency);
   },
   calculateFilterFrequency: function (rotation) {
     // logic to calculate the filter frequency based on the rotation
     const frequencyRange = 3500; // 5000 Hz range
-    const frequencyOffset = 50; // 100 Hz minimum frequency
+    const frequencyOffset = 50; // 50 Hz minimum frequency
     const resolution = 24;
     let normalizedRotation = (rotation.x + Math.PI) / (2 * Math.PI);
     normalizedRotation = (normalizedRotation - 0.25 + 1) % 1;
@@ -695,15 +695,15 @@ AFRAME.registerComponent("virtual-keyboard", {
       Math.round(normalizedRotation * frequencyRange * resolution) / resolution;
 
     return filterFrequency;
-  }, 
-  
+  },
+  // go up one octave
   octaveUp: function () {
     if (this.data.rootNote < 108) {
       this.data.rootNote += OCTAVE;
       this.updateKey();
     }
   },
-
+  // go down one octave
   octaveDown: function () {
     if (this.data.rootNote > 0) {
       this.data.rootNote -= OCTAVE;

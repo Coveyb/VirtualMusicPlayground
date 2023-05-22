@@ -143,6 +143,8 @@ AFRAME.registerComponent("wrist-menu", {
 
         return {
           id: name,
+          text: name,
+          secondaryText:"",
           position: `${x} ${y} 0`,
           width: "0.08",
           height: "0.025",
@@ -195,10 +197,11 @@ AFRAME.registerComponent("wrist-menu", {
           depth: "0.005",
           color: "#000C66",
           wireframe: "true",
-          textColor: "#64B5F6",
-          textWidth: "0.18",
+          textColor: "black",
+          textWidth: "0.22",
           textZOffset: "0.03",
-          text: data.instrumentId,
+          text: "Switch\nInstrument",
+          secondaryText: data.instrumentId,
           gridPos: [-1, 0],
           callback: (id) => {
             currentIndex = (currentIndex + 1) % data.instruments.length;
@@ -220,10 +223,11 @@ AFRAME.registerComponent("wrist-menu", {
           depth: "0.005",
           color: "#000C66",
           wireframe: "true",
-          textColor: "#64B5F6",
-          textWidth: "0.18",
+          textColor: "black",
+          textWidth: "0.22",
           textZOffset: "0.03",
-          text: "",
+          text: "Octave\nDown",
+          secondaryText: "",
           gridPos: [-1, 0],
           callback: (id) => {
             this.instrumentEl.components["virtual-keyboard"].octaveDown();
@@ -237,10 +241,11 @@ AFRAME.registerComponent("wrist-menu", {
           depth: "0.005",
           color: "#000C66",
           wireframe: "true",
-          textColor: "#64B5F6",
-          textWidth: "0.18",
+          textColor: "black",
+          textWidth: "0.22",
           textZOffset: "0.03",
-          text: "",
+          text: "Octave\nUp",
+          secondaryText: "",
           gridPos: [-1, 0],
           callback: (id) => {
             this.instrumentEl.components["virtual-keyboard"].octaveUp();
@@ -248,16 +253,17 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "filterType",
-          position: "-0.15 0.015 0",
+          position: "-0.15 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           wireframe: "false",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
-          text: "",
+          text: "Filter\nType",
+          secondaryText: "",
           gridPos: [0, 0],
           callback: (id) => {
             console.log("filterSelector");
@@ -279,14 +285,17 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "detune",
-          position: "-0.090 0.015 0",
+          position: "-0.090 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
+          text: "Detune",
+          secondaryText: "",
+
           wireframe: "false",
           gridPos: [0, 1],
           slider: true,
@@ -303,17 +312,18 @@ AFRAME.registerComponent("wrist-menu", {
           },
         },
 
-      
         {
           id: "filterFrequency",
-          position: "-0.15 -0.072 0",
+          position: "-0.15 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Filter\nFrequency",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 0],
           slider: true,
@@ -333,14 +343,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "resonance",
-          position: "-0.090 -0.072 0",
+          position: "-0.090 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
+          text: "Resonance",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 1],
           slider: true,
@@ -360,13 +372,15 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "nxt",
-          position: "0.163 0.015 0",
+          position: "0.163 0.015 0.003",
           width: "0.022",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          text: "Next\nPage",
+          secondaryText: "",
+          textWidth: "0.17",
           textZOffset: "0.03",
           wireframe: "false",
           gridPos: [0, 5],
@@ -380,14 +394,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "presetSampleSubMenu",
-          position: "0.105 0.015 0",
+          position: "0.105 0.015 0.003",
           width: "0.08",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Browse\nPresets/Samples",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [0, 4],
           callback: () => {
@@ -404,13 +420,15 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "oscillatorType",
-          position: "-0.030 0.015 0",
+          position: "-0.030 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
+          text: "Select\nOscillator\nType",
+          secondaryText: "",
           textZOffset: "0.03",
           wireframe: "false",
           gridPos: [0, 2],
@@ -432,14 +450,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "transportStart",
-          position: "0.030 0.015 0",
+          position: "0.030 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Start\nTransport",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [0, 3],
           callback: () => {
@@ -449,14 +469,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "attack",
-          position: "-0.030 -0.072 0",
+          position: "-0.030 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
+          text: "Attack",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 2],
           slider: true,
@@ -476,15 +498,17 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "sustain",
-          position: "0.030 -0.072 0",
+          position: "0.030 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
           wireframe: "false",
+          text: "Sustain",
+          secondaryText: "",
           gridPos: [1, 3],
           slider: true,
           callback: (yValue, id) => {
@@ -503,14 +527,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "decay",
-          position: "0.090 -0.072 0",
+          position: "0.090 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
+          text: "Decay",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 4],
           slider: true,
@@ -530,13 +556,15 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "release",
-          position: "0.150 -0.072 0",
+          position: "0.150 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#000C66",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          text: "Release",
+          secondaryText: "",
+          textWidth: "0.23",
           textZOffset: "0.03",
           wireframe: "false",
           slider: true,
@@ -558,13 +586,15 @@ AFRAME.registerComponent("wrist-menu", {
       page2: [
         {
           id: "instrumentSelect",
-          position: "-0.15 0.015 0",
+          position: "-0.15 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          text: "Select\nInstrument",
+          secondaryText: "",
+          textWidth: "0.22",
           textZOffset: "0.03",
           wireframe: "false",
           gridPos: [0, 0],
@@ -581,13 +611,15 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "soundSourceSelect",
-          position: "-0.090 0.015 0",
+          position: "-0.090 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          text: "Select\nSound\nSource",
+          secondaryText: "",
+          textWidth: "0.22",
           textZOffset: "0.03",
           wireframe: "false",
           gridPos: [0, 1],
@@ -604,14 +636,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "spawn-instrument",
-          position: "0.105 0.015 0",
+          position: "0.105 0.015 0.003",
           width: "0.08",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           wireframe: "false",
+          text: "Spawn\nInstrument",
+          secondaryText: "",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
           gridPos: [0, 4],
           callback: (event) => {
@@ -635,13 +669,15 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "selectEffect1",
-          position: "-0.030 0.015 0",
+          position: "-0.030 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
+          text: "Select\nEffect\n1",
+          secondaryText: "",
           textZOffset: "0.03",
           wireframe: "false",
           gridPos: [0, 2],
@@ -667,14 +703,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "selectEffect2",
-          position: "0.030 0.015 0",
+          position: "0.030 0.015 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.23",
           textZOffset: "0.03",
+          text: "Select\nEffect\n2",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [0, 3],
           callback: (id) => {
@@ -699,14 +737,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "rotateLeft",
-          position: "-0.030 -0.072 0",
+          position: "-0.030 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Rotate\nLeft",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 2],
           slider: false,
@@ -721,14 +761,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "rotateRight",
-          position: "0.030 -0.072 0",
+          position: "0.030 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
-          color: "#B24BF3",
+          color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Rotate\nRight",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 3],
           slider: false,
@@ -743,14 +785,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "moveForward",
-          position: "0.090 -0.072 0",
+          position: "0.090 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Move\nForward",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 4],
           slider: false,
@@ -765,14 +809,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "moveBackward",
-          position: "0.150 -0.072 0",
+          position: "0.150 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Move\nBack",
+          secondaryText: "",
           wireframe: "false",
           slider: false,
           gridPos: [1, 5],
@@ -786,14 +832,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "moveLeft",
-          position: "-0.15 -0.072 0",
+          position: "-0.15 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Move\nLeft",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 0],
           slider: false,
@@ -808,14 +856,16 @@ AFRAME.registerComponent("wrist-menu", {
 
         {
           id: "moveRight",
-          position: "-0.090 -0.072 0",
+          position: "-0.090 -0.072 0.003",
           width: "0.05",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Move\nRight",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [1, 1],
           slider: false,
@@ -829,14 +879,16 @@ AFRAME.registerComponent("wrist-menu", {
         },
         {
           id: "back",
-          position: "0.163 0.015 0",
+          position: "0.163 0.015 0.003",
           width: "0.022",
           height: "0.08",
           depth: "0.005",
           color: "#800080",
           textColor: "#FFFFFF",
-          textWidth: "0.18",
+          textWidth: "0.22",
           textZOffset: "0.03",
+          text: "Back",
+          secondaryText: "",
           wireframe: "false",
           gridPos: [0, 5],
           callback: () => {
@@ -867,15 +919,32 @@ AFRAME.registerComponent("wrist-menu", {
 
     const homeButton = document.createElement("a-box");
     homeButton.setAttribute("id", "background");
-    homeButton.setAttribute("scale", "0.07 0.07 -0.00001");
-    homeButton.setAttribute("position", "0 0.1 0");
-    homeButton.setAttribute("color", "#E3F2FD");
+    homeButton.setAttribute("scale", "0.035 0.035 -0.00001");
+    homeButton.setAttribute("position", "0 0.13 0");
+    homeButton.setAttribute("color", "#191970");
     homeButton.setAttribute("class", "clickable");
+    homeButton.setAttribute("text", {
+      value: "HOME",
+      color: "#FFFFFF",
+      zOffset: 0.03,
+      align: "center",
+      letterSpacing: 1.45,
+    });
+
     homeButton.addEventListener("click", () => {
       this.data.currentPage = this.data.currentPage = "page1";
       this.el.innerHTML = "";
       this.init();
     });
+
+    const homeButtonText = document.createElement("a-text");
+    homeButtonText.setAttribute("value", "HOME");
+    homeButtonText.setAttribute("color", "#FFFFFF");
+    homeButtonText.setAttribute("align", "center");
+    homeButtonText.setAttribute("letter-spacing", "1.45");
+    homeButtonText.setAttribute("position", "0 0 0.05");
+
+    homeButton.appendChild(homeButtonText);
 
     const bg = document.createElement("a-box");
     menuUi.appendChild(bg);
@@ -884,7 +953,7 @@ AFRAME.registerComponent("wrist-menu", {
     bg.setAttribute("id", "background");
     bg.setAttribute("scale", "0.37 -0.177 -0.00001");
     bg.setAttribute("position", "0 -0.028 0");
-    bg.setAttribute("color", "#E3F2FD");
+    bg.setAttribute("color", "#36454F");
 
     emitMenuConfigUpdate(
       this.data.rows,
@@ -895,6 +964,7 @@ AFRAME.registerComponent("wrist-menu", {
   },
 
   tick: function () {
+    // tracks the menu to the controller
     setMenuPositionAndRotation(this.controllerEl, this.el);
   },
 });

@@ -1,7 +1,7 @@
 
  export const instruments = [];
 
-
+// generates a unique id so that the new instrument element can be accessed by wrist menu 
 function generateId(type, soundSource, effects = []) {
   const typeString = type || "";
   const soundSourceString = soundSource || "";
@@ -49,10 +49,10 @@ export function removeInstrument(id) {
   const index = instruments.findIndex((i) => i.id === id);
   // remove the instrument from the instrument sarray
   instruments.splice(index, 1);
-  // find the corresponding A-Frame entity
-  const instrumentEl = document.querySelector(
-    `[instrument][instrument-id="${id}"]`
-  );
+  // find the corresponding a-frame entity
+  const instrumentEl = document.getElementById(id);
+
+ 
   // remove the instrument entity from the scene
   instrumentEl.parentNode.removeChild(instrumentEl);
 }
@@ -62,7 +62,7 @@ function updateEffects(id, effects) {
   const instrument = instruments.find((i) => i.id === id);
   // update the effects of the instrument
   instrument.effects = effects;
-  // find the corresponding A-Frame entity
+  // find the corresponding a-frame entity
   const instrumentEl = document.querySelector(
     `[instrument][instrument-id="${id}"]`
   );

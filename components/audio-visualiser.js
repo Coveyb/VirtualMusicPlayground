@@ -2,7 +2,7 @@ AFRAME.registerComponent("audio-visualiser", {
   schema: {
     gridSize: { type: "number", default: 10 },
     cubeSize: { type: "number", default: 4 },
-    bpm: { type: "number", default: 60 },
+    bpm: { type: "number", default: Tone.Transport.bpm.value },
     startHue: { type: "number", default: 160 },
   },
 
@@ -28,7 +28,7 @@ AFRAME.registerComponent("audio-visualiser", {
         this.el.appendChild(cube);
         this.cubes.push({
           el: cube,
-          // assign each cube a base hue based on its position
+          // assign each cube a base hue based on its position to give the diagnonal effect
           baseHue: ((x + y) / (this.data.gridSize * 2)) * 360,
         });
       }
@@ -38,17 +38,24 @@ AFRAME.registerComponent("audio-visualiser", {
   },
 
   tick: function () {
+    // use the tone.js analyzer to store the current frequency data
     const frequencyData = this.analyzer.getValue();
+    
+    // iterate over all the cubes,the frequencyData is used to manipulate the scale of the cubes one by one based on the frequency
     for (let i = 0; i < this.cubes.length; i++) {
+      // split the frequncy data over the number of cubes one by one, and storing the value
       const value = frequencyData[i % frequencyData.length];
+      // process the value using math.max to appropiately represent the frequency using the adjusted scale on the y axis
       const scale = Math.max(0, (value + 140) / 100);
       this.cubes[i].el.setAttribute("scale", { x: 1, y: scale, z: 1 });
     }
   },
 
   runLightShow: function () {
+    // set a new interval based on the bpm to give it a somewhat rhytmical effect
     this.lightShowInterval = setInterval(() => {
-      const frequencyData = this.analyzer.getValue();
+      
+      // set the cube colour one by one, using the getNextColour method and passing in the baseHue as a starting point
       for (let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i].el;
         const color = this.getNextColour(this.cubes[i].baseHue);
@@ -65,7 +72,5 @@ AFRAME.registerComponent("audio-visualiser", {
     return `hsl(${hue}, 70%, 50%)`;
   },
 
-  remove: function () {
-    clearInterval(this.lightShowInterval);
-  },
+ 
 });

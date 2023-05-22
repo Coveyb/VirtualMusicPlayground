@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Test Suite</title>
+<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.19.4.css" />
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="https://code.jquery.com/qunit/qunit-2.19.4.js"></script>
+</body>
+<script>
+    // constants for calculating musical notes
+  const OCTAVE = 12;
+  const MAJOR_THIRD = 4;
+  const MINOR_THIRD = 3;
+  const FIFTH = 7;
+  const MAJOR_SEVENTH = 11;
+  const MINOR_SEVENTH = 10;
+
+     function noteStringToInteger(noteString) {
+      const noteValues = {
+        C: 0,
+        "C#": 1,
+        Db: 1,
+        D: 2,
+        "D#": 3,
+        Eb: 3,
+        E: 4,
+        F: 5,
+        "F#": 6,
+        Gb: 6,
+        G: 7,
+        "G#": 8,
+        Ab: 8,
+        A: 9,
+        "A#": 10,
+        Bb: 10,
+        B: 11,
+      };
+
+      const noteName = noteString.slice(0, -1);
+      const octave = parseInt(noteString.slice(-1));
+
+      return noteValues[noteName] + octave * OCTAVE;
+    }
+
+    // converts note integer to a note (string)
+    function noteIntegerToString(noteInt) {
+      const noteNames = [
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+        "A",
+        "A#",
+        "B",
+      ];
+
+      const octave = Math.floor((noteInt ) / OCTAVE);
+      const noteName = noteNames[noteInt % OCTAVE];
+
+      return noteName + octave;
+    }
+      function getChordNotes(note, includeSeventh, octaveRange) {
+        const noteInt = noteStringToInteger(note);
+        const notes = [];
+        let chordRoot = (noteInt % OCTAVE) + Math.floor(noteInt / OCTAVE) * OCTAVE;
+        let chordType = "major";
+
+        // Determine the chord type based on the note
+        switch (noteInt % OCTAVE) {
+          case 0:
+          case 5:
+            chordType = "major";
+            break;
+          case 2:
+          case 9:
+            chordType = "minor";
+            break;
+        }
+
+        // Add the root note
+        notes.push(chordRoot);
+
+        // Add the third
+        if (chordType === "major") {
+          notes.push(
+            ((chordRoot + MAJOR_THIRD) % OCTAVE) +
+              Math.floor((chordRoot + MAJOR_THIRD) / OCTAVE) * OCTAVE
+          );
+        } else {
+          notes.push(
+            ((chordRoot + MINOR_THIRD) % OCTAVE) +
+              Math.floor((chordRoot + MINOR_THIRD) / OCTAVE) * OCTAVE
+          );
+        }
+
+        // Add the fifth
+        notes.push(
+          ((chordRoot + FIFTH) % OCTAVE) +
+            Math.floor((chordRoot + FIFTH) / OCTAVE) * OCTAVE
+        );
+
+        // Add the seventh if flagged
+        if (includeSeventh) {
+          if (chordType === "major") {
+            notes.push(
+              ((chordRoot + MAJOR_SEVENTH) % OCTAVE) +
+                Math.floor((chordRoot + MAJOR_SEVENTH) / OCTAVE) * OCTAVE
+            );
+          } else {
+            notes.push(
+              ((chordRoot + MINOR_SEVENTH) % OCTAVE) +
+                Math.floor((chordRoot + MINOR_SEVENTH) / OCTAVE) * OCTAVE
+            );
+          }
+        }
+
+        return notes;
+      }
+
+  QUnit.module("Music Function Tests", function () {
+    QUnit.test("noteStringToInteger function test", function (assert) {
+      assert.equal(
+        noteStringToInteger("C4"),
+        48,
+        "C4 should be converted to 48"
+      );
+      assert.equal(
+        noteStringToInteger("D4"),
+        50,
+        "D4 should be converted to 50"
+      );
+      assert.equal(
+        noteStringToInteger("B4"),
+        59,
+        "B4 should be converted to 59"
+      );
+      assert.equal(noteStringToInteger("C0"), 0, "C0 should be converted to 0");
+      assert.equal(
+        noteStringToInteger("C#4"),
+        49,
+        "C#4 should be converted to 49"
+      );
+      assert.equal(
+        noteStringToInteger("Db4"),
+        49,
+        "Db4 should be converted to 49"
+      );
+    });
+    QUnit.test("noteIntegerToString function test", function (assert) {
+      assert.equal(
+        noteIntegerToString(48),
+        "C4",
+        "48 should be converted to C4"
+      );
+      assert.equal(
+        noteIntegerToString(50),
+        "D4",
+        "50 should be converted to D4"
+      );
+      assert.equal(
+        noteIntegerToString(59),
+        "B4",
+        "59 should be converted to B4"
+      );
+      assert.equal(noteIntegerToString(0), "C0", "0 should be converted to C0");
+      assert.equal(
+        noteIntegerToString(49),
+        "C#4",
+        "49 should be converted to C#4"
+      );
+    });
+
+    QUnit.test("getChordNotes function test", function (assert) {
+      assert.deepEqual(
+        getChordNotes("C4", false),
+        [48, 52, 55],
+        "C4 chord without seventh should be [48, 52, 55]"
+      );
+      assert.deepEqual(
+        getChordNotes("C4", true),
+        [48, 52, 55, 59],
+        "C4 chord with seventh should be [48, 52, 55, 59]"
+      );
+      assert.deepEqual(
+        getChordNotes("D4", false),
+        [50, 53, 57],
+        "D4 chord without seventh should be [50, 53, 57]"
+      );
+      assert.deepEqual(
+        getChordNotes("D4", true),
+        [50, 53, 57, 60],
+        "D4 chord with seventh should be [50, 53, 57, 60]"
+      );
+      assert.deepEqual(
+        getChordNotes("B4", false),
+        [59, 63, 66],
+        "B4 chord without seventh should be [59, 63, 66]"
+      );
+      assert.deepEqual(
+        getChordNotes("B4", true),
+        [59, 63, 66, 70],
+        "B4 chord with seventh should be [59, 63, 66, 70]"
+      );
+    });
+  });
+</script>
