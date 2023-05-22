@@ -1,8 +1,8 @@
 import { removeInstrument } from "../instrument-manager.js";
 
 
-// creates the cubes used by the sequencer
-function createCubes(el) {
+// creates the  sequencer
+function createSequencer(el) {
   const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
   const cubeSize = 0.5;
   const spacing = 0.6;
@@ -68,7 +68,7 @@ function createCubes(el) {
     }
   }
 
-  // create planes for pattern bank buttons as well as play and stop buttons and remove button
+  // create planes for pattern bank buttons \
   function createButtons(xPosition, color, index, loadPatternFunction) {
     const pattern = document.createElement("a-plane");
     pattern.setAttribute("position", `${xPosition} 0 0`);
@@ -169,7 +169,14 @@ playStopAllButton.appendChild(playStopAllButtonText);
     removeInstrument(this.el.id)
   });
   
-  
+  const instrumentIdText = document.createElement("a-text");
+  instrumentIdText.setAttribute("value", this.el.id);
+  instrumentIdText.setAttribute("position", "4.5 7 0");
+  instrumentIdText.setAttribute("color", "black");
+  instrumentIdText.setAttribute("align", "center");
+  instrumentIdText.setAttribute("scale", "3 3 3");
+
+  el.appendChild(instrumentIdText);
   
   parentEntity.appendChild(playStopAllButton);
 
@@ -177,7 +184,7 @@ playStopAllButton.appendChild(playStopAllButtonText);
   parentEntity.setAttribute("position", "4.5 4.8 0.45");
   parentEntity.setAttribute("rotation", "17 0 0");
 }
-
+// end of create sequencer function
 
 
 
@@ -202,8 +209,8 @@ AFRAME.registerComponent("sequencer", {
     this.lightShowInterval = null;
     this.currentPattern = -1;
 
-    this.createCubes = createCubes.bind(this);
-    this.createCubes(this.el);
+    this.createSequencer = createSequencer.bind(this);
+    this.createSequencer(this.el);
 
     this.currentStep = 0;
     this.seqPlaying = false;
@@ -225,11 +232,11 @@ AFRAME.registerComponent("sequencer", {
     this.el.addEventListener("stopSequence", () => {
       this.seqPlaying = false;
       this.currentStep = 0;
+           
+
     });
 
-    this.el.addEventListener("pauseSequence", () => {
-      this.seqPlaying = false;
-    });
+    
 
     this.el.sceneEl.addEventListener("playAllSequencers", () => {
       if (!this.seqPlaying) {
@@ -243,6 +250,8 @@ AFRAME.registerComponent("sequencer", {
       if (this.seqPlaying) {
         this.seqPlaying = false;
         this.currentStep = 0;
+             
+
       }
     });
   },
