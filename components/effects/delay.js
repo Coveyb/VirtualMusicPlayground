@@ -1,12 +1,12 @@
 // registering the delay component
 AFRAME.registerComponent("delay", {
   schema: {
-    type: { type: "string", default: "pingpong" }, // sets the type of delay
-    time: { type: "number", default: 5.25 }, // Controls the delay time
-    feedback: { type: "number", default: 0.5 }, // controls the amount of feedback
-    wet: { type: "number", default: 0.5 }, // controls the level of the wet signal
-    taps: { type: "number", default: 6 }, // controls the number of taps in the delay
-    spread: { type: "number", default: 20 }, // spread of the taps (only for multitap)
+    type: { type: "string", default: "pingpong" }, 
+    time: { type: "number", default: 5.25 }, 
+    feedback: { type: "number", default: 0.5 }, 
+    wet: { type: "number", default: 0.5 },
+    taps: { type: "number", default: 6 }, 
+    spread: { type: "number", default: 20 }, 
   },
 
   presets: {
@@ -16,17 +16,17 @@ AFRAME.registerComponent("delay", {
   },
 
   init: function () {
-    // set the delay type on initialization
+    // set the delay type on init
     this.setDelayType(this.data.type);
   },
 
   update: function (oldData) {
-    // ff the type has changed, update the delay type
+   
     if (oldData.type !== this.data.type) {
       this.setDelayType(this.data.type);
     }
 
-    // update the delay parameters
+    
     this.setDelayParameters();
   },
 
@@ -60,13 +60,13 @@ AFRAME.registerComponent("delay", {
   },
 
   connect: function (node) {
-    // connect the delay to the given node
+   
 
     node.connect(this.delay);
   },
 
   disconnect: function (node) {
-    // disconnect the delay from the given node
+    
     node.disconnect(this.delay);
   },
 });
