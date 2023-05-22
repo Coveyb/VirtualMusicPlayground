@@ -62,6 +62,7 @@ export function spawnInstrument(type, soundSource, effects, position, scale) {
   return instrumentEl.getAttribute("id");
 }
 
+// used to add effects during the initial spawning of an instruemnt and called within spawnInstrument()
 function initAddEffects(synthEl, samplerEl, effects, instrumentEl) {
   effects.forEach((effect) => {
     console.log(effect);

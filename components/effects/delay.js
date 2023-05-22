@@ -1,12 +1,12 @@
 // registering the delay component
 AFRAME.registerComponent("delay", {
   schema: {
-    type: { type: "string", default: "pingpong" }, // Determines the type of delay
+    type: { type: "string", default: "pingpong" }, // sets the type of delay
     time: { type: "number", default: 5.25 }, // Controls the delay time
-    feedback: { type: "number", default: 0.5 }, // Controls the amount of feedback
-    wet: { type: "number", default: 0.5 }, // Controls the level of the wet signal
-    taps: { type: "number", default: 6 }, // Controls the number of taps in the delay
-    spread: { type: "number", default: 20 }, // Spread of the taps (only for multitap)
+    feedback: { type: "number", default: 0.5 }, // controls the amount of feedback
+    wet: { type: "number", default: 0.5 }, // controls the level of the wet signal
+    taps: { type: "number", default: 6 }, // controls the number of taps in the delay
+    spread: { type: "number", default: 20 }, // spread of the taps (only for multitap)
   },
 
   presets: {

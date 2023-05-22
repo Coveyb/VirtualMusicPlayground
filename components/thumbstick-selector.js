@@ -14,9 +14,11 @@ AFRAME.registerComponent("thumbstick-selector", {
 
 
     this.pages = [];
+    
+    // listens to see if menu has been updated and updates the relevant information in this component 
     this.el.addEventListener("menu-assigned", () => {
       this.onMenuConfigUpdate(event);
-      console.log(this.pages)
+      
     });
     this.el.sceneEl.addEventListener(
       "xbuttondown",
@@ -25,8 +27,7 @@ AFRAME.registerComponent("thumbstick-selector", {
   },
 
   onMenuConfigUpdate: function (event) {
-    console.log(event);
-    console.log("event");
+   
 
     const { rows, columns, menuSelector, pages } = event.detail;
     this.updateMenuConfig(rows, columns, menuSelector, pages);
@@ -36,6 +37,7 @@ AFRAME.registerComponent("thumbstick-selector", {
   },
 
   onThumbstickMoved: function (evt) {
+    // check if thumbstick is moving in the last 100ms to prevent it moving too fast.
     if (this.isThumbstickMoving) {
       return;
     }
@@ -56,24 +58,24 @@ AFRAME.registerComponent("thumbstick-selector", {
       }
     } else {
       if (y < -0.8) {
-        console.log("UP");
+        
         this.selectedRow = Math.max(this.selectedRow - 1, 0);
         console.log(this.selectedRow);
       } else if (y > 0.8) {
-        console.log("DOWN");
+        
         this.selectedRow = Math.min(this.selectedRow + 1, this.data.rows - 1);
         console.log(this.selectedRow);
       }
 
       if (x > 0.5) {
-        console.log("RIGHT");
+        
         this.selectedColumn = Math.min(
           this.selectedColumn + 1,
           this.data.columns - 1
         );
         console.log(this.selectedColumn);
       } else if (x < -0.5) {
-        console.log("LEFT");
+    
         this.selectedColumn = Math.max(this.selectedColumn - 1, 0);
         console.log(this.selectedColumn);
       }
@@ -117,7 +119,7 @@ const currentPage = wristMenuComponent.data.currentPage;
           item.setAttribute("material", "color: red");
         } else {
           // apply a style to highlight the selected item as orange when slider is not active
-          item.setAttribute("material", "color: orange");
+          item.setAttribute("material", "color: #8B4000");
         }
       } else {
         // reset the style or class for non-selected items
@@ -131,7 +133,7 @@ const currentPage = wristMenuComponent.data.currentPage;
     const selectedItemConfig = this.getSelectedItem();
     const id = selectedItemConfig.id;
     
-    console.log("select confuguekl: ", selectedItemConfig.id)
+    
     if (selectedItemConfig) {
       if (selectedItemConfig.slider) {
         // toggle the slider
@@ -151,7 +153,6 @@ const currentPage = wristMenuComponent.data.currentPage;
     this.selectedRow = 0;
     this.selectedColumn = 0;
     this.pages = pages;
-    console.log("MENUCONFIG");
-    console.log(pages);
+
   },
 });

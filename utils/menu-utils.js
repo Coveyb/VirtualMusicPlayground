@@ -1,3 +1,4 @@
+// used by wrist nmenu to allow the user to cycle through synth parameters such as waveform and filter type 
 export function cycleThroughList(id, synthEl, list, currentValue, updateFunc) {
   const currentIndex = list.indexOf(currentValue);
   const nextIndex = (currentIndex + 1) % list.length;
@@ -9,7 +10,8 @@ export function cycleThroughList(id, synthEl, list, currentValue, updateFunc) {
     updateFunc.call(synthEl.components.synth, id, nextValue);
   }
 }
-
+// takes input of the id of the button(slider), min and max values, the synth element, the y value from the thumbstick moving event
+// along with a sensitivity value and the update method
 export function adjustSliderValue(
   sliderId,
   min,
@@ -29,13 +31,9 @@ export function adjustSliderValue(
     isThumbstickMoving = false;
   }, 150);
 
-  //not grabbing the right value, of detune(testing)
+  
   const currentValue = synthEl.getAttribute("synth")[sliderId];
-  console.log(currentValue + "CURRENT");
 
-  console.log("SYNTHE L ", synthEl.getAttribute("synth")[sliderId]);
-
-  console.log("SLIDER ID :  ", sliderId);
 
   let step = sensitivity;
   if (yValue > 0.7) {
@@ -44,7 +42,7 @@ export function adjustSliderValue(
     step = sensitivity;
   }
 
-  // Determine the new value based on the current value and step
+  // determine the new value based on the current value and step
   let newValue = currentValue + step;
 
   if (newValue < min) {
@@ -53,25 +51,22 @@ export function adjustSliderValue(
     newValue = max;
   }
   console.log(newValue + "NEW");
-  // slider.setAttribute("slider-value", newValue);
-  // Pass the value to the synth element
+ 
+  // pass the value to the synth element
   updateMethod.call(synthEl.components.synth, sliderId, newValue);
-  // Update the slider's visual representation here
-  // ...
+ 
+  
 }
 
-export function evenlySpaceRange(start, end, numInputs) {
-  let interval = (end - start) / (numInputs - 1);
-  return Array.from({ length: numInputs }, (_, i) => start + i * interval);
-}
 
+// emits the menu config update, intended for the listener within thumbstick selector
 export function emitMenuConfigUpdate(rows, columns, menuSelector, pages) {
   const event = new CustomEvent("menu-assigned", {
     detail: { rows, columns, menuSelector, pages },
   });
   document.querySelector(menuSelector).emit("menu-assigned", event.detail);
 }
-
+// create a button using the config from the pages object within wrist menu
 export function createButton({
   id,
   position,
@@ -85,6 +80,7 @@ export function createButton({
   textZOffset,
   textWidth,
   text,
+  secondaryText,
 }) {
   const button = document.createElement("a-box");
   button.setAttribute("id", id);
@@ -95,10 +91,10 @@ export function createButton({
   button.setAttribute("color", color);
   button.setAttribute("class", "clickable");
   button.setAttribute("scale", "1 1 0.005");
-  button.setAttribute("opacity", "0.25");
+  button.setAttribute("opacity", "1");
   button.setAttribute("wireframe", wireframe);
   button.setAttribute("text", {
-    value: id,
+    value: text,
     align: "center",
     letterSpacing: 1.45,
     zOffset: textZOffset,
@@ -111,7 +107,7 @@ export function createButton({
 
   const text2 = document.createElement("a-text");
   text2.setAttribute("id", `${id}text`);
-  text2.setAttribute("value", text);
+  text2.setAttribute("value", secondaryText);
   text2.setAttribute("align", "center");
   text2.setAttribute("position", "0 0.025 0.005");
   text2.setAttribute("width", textWidth);
@@ -123,12 +119,10 @@ export function createButton({
   
   button.appendChild(text2);
 
-  // if (text2.getAttribute("value") == undefined) {
-  //     text2.setAttribute("value", " ");
-  // }
+ 
   return button;
 }
-
+// call create button for each button in the menu
 export function createMenuButtons(menuUi, page, synthEl) {
   page.forEach((buttonConfig) => {
     menuUi.appendChild(createButton(buttonConfig));
