@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Musical Sampler/Sequencer</title>
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@cb0bb8407968be713b79008548b7044908ba5729/dist/aframe-master.min.js"></script>
+    <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+    <script src="https://unpkg.com/aframe-extras@6.1.0/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@4.3.1/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-haptics-component/dist/aframe-haptics-component.min.js"></script>
+
+    <script type="module" src="components/virtual-keyboard.js"></script>
+
+    <script type="module" src="components/synth.js"></script>
+    <script type="module" src="components/wrist-menu.js"></script>
+    <script src="components/toggle-wrist-menu.js"></script>
+    <script src="components/thumbstick-selector.js"></script>
+
+    <script src="components/transport.js"></script>
+    <script src="components/samplerLoop.js"></script>
+    <script type="module" src="components/sampler.js"></script>
+
+    <script src="components/sequencer.js"></script>
+
+    <script type="module" src="instrument-manager.js"></script>
+    <script src="components/effects/reverb.js"></script>
+    <script src="components/audio-visualiser.js"></script>
+    <script src="components/effects/delay.js"></script>
+
+    <script src="components/effects/autofilter-lfo.js"></script>
+    <script type="module" src="components/instrument-spawner.js"></script>
+
+    <!--                 
+ -->
+  </head>
+  <body>
+    <a-scene>
+      <a-sky color="#FFFFFF"></a-sky>
+      <a-entity
+        material
+        audio-visualiser
+        position="-18.9 15 18.9"
+        rotation="180 0 0"
+      ></a-entity>
+      <a-camera id="camera" position="0 1.6 0" tracked-controls>
+        <a-entity id="hud" position="0 1 -5">
+          <a-text
+            id="floating-text"
+            value="Floating Text"
+            color="#000000"
+            align="center"
+            width="4"
+            visible="false"
+          ></a-text
+        ></a-entity>
+      </a-camera>
+      <a-entity
+        id="mouseCursor"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .clickable"
+      ></a-entity>
+      <a-entity
+        laser-controls="hand: left; "
+        raycaster="objects: .clickable; lineColor: red; lineOpacity: 0.5"
+        id="hand-left"
+        sphere-collider="objects: .playable; radius: 0.001;"
+        haptics
+      ></a-entity>
+
+      <a-entity
+        laser-controls="hand: right; "
+        raycaster="objects: .clickable; lineColor: red; lineOpacity: 0.5"
+        id="hand-right"
+        sphere-collider="objects: .playable; radius: 0.001;"
+        haptics
+      >
+      </a-entity>
+      <a-entity transport="bpm: 120" id="master-clock"></a-entity>
+      <a-entity
+        id="wrist-menu"
+        thumbstick-selector
+        wrist-menu
+        toggle-wrist-menu
+      ></a-entity>
+
+      <!-- demo sequencer mainly for non VR use -->
+      <a-entity position="-2.5 0 -5">
+        <a-entity sequencer sampler></a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
