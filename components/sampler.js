@@ -120,4 +120,11 @@ AFRAME.registerComponent("sampler", {
   getSampler: function () {
     return this.sampler;
   },
+
+  removeSampler: function () {
+    if (this.sampler) {
+      this.sampler.dispose();
+      this.sampler = null;
+    }
+  },
 });
