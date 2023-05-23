@@ -27,10 +27,17 @@ export function addInstrument(
 export function removeInstrument(id) {
   // find the index of the instrument in the instruments array
   const index = instruments.findIndex((i) => i.id === id);
-  // remove the instrument from the instrument sarray
+  // remove the instrument from the instrument array
   instruments.splice(index, 1);
   // find the corresponding a-frame entity
   const instrumentEl = document.getElementById(id);
+
+  // dispose of the synth or sampler
+  if (instrumentEl.components.synth) {
+    instrumentEl.components.synth.removeSynthAndFilter();
+  } else if (instrumentEl.components.sampler) {
+    instrumentEl.components.sampler.removeSampler();
+  }
 
   // remove the instrument entity from the scene
   instrumentEl.parentNode.removeChild(instrumentEl);

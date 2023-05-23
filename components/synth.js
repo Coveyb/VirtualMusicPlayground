@@ -267,6 +267,8 @@ AFRAME.registerComponent("synth", {
     this.data.modulationRelease = newModulationRelease;
     this.synth.set({ modulationEnvelope: { release: newModulationRelease } });
   },
+  
+  
 
   // update property by taking propertyName, using the map to find the update function and using the propertyValue in the updatefunction
   updateProperty: function (propertyName, propertyValue) {
@@ -337,6 +339,18 @@ AFRAME.registerComponent("synth", {
         clearTimeout(this.textTimeout);
       }
       updateAndShowText(floatingText, `${propertyName}: ${propertyValue}`);
+    }
+  },
+  
+  removeSynthAndFilter: function () {
+    if (this.synth) {
+      this.synth.dispose();
+      this.synth = null;
+    }
+
+    if (this.filter) {
+      this.filter.dispose();
+      this.filter = null;
     }
   },
 
