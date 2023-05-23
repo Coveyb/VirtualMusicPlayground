@@ -27,29 +27,24 @@ AFRAME.registerComponent("synth", {
   },
 
   init: function () {
-    
     //create the synthm, then the filter, then chain them together to send them to the master output
     this.createSynth();
     this.createFilter();
     this.synth.chain(this.filter, Tone.Destination);
 
-
     // keep track of which notes are currently being played
-    this.playingNotes = {}; 
+    this.playingNotes = {};
 
     this.el.addEventListener("noteOn", (e) => {
       const note = e.detail.note;
       const chord = e.detail.chord;
       const velocity = e.detail.velocity;
 
-     
-
       if (note) {
         if (this.playingNotes[note]) {
-         
           return;
         }
-       
+
         this.playingNotes[note] = true;
         this.synth.triggerAttack(note, Tone.now(), velocity);
       } else if (chord) {
@@ -61,10 +56,9 @@ AFRAME.registerComponent("synth", {
           chord.forEach((note) => {
             this.playingNotes[note] = true;
           });
-          
+
           this.synth.triggerAttack(chord, Tone.now(), velocity);
         } else {
-         
         }
       }
     });
@@ -104,8 +98,6 @@ AFRAME.registerComponent("synth", {
         }
       }
     });
-
-    
   },
 
   createSynth: function () {
@@ -136,7 +128,6 @@ AFRAME.registerComponent("synth", {
         break;
     }
     console.log("within createSynth", this.synth);
-    
   },
 
   createFilter: function () {
@@ -158,7 +149,6 @@ AFRAME.registerComponent("synth", {
     this.synth.connect(effect);
   },
 
-  
   // loads a new preset from the presets.js file
   updatePreset: function (presetKey) {
     const newPreset = presets[presetKey];
@@ -171,14 +161,13 @@ AFRAME.registerComponent("synth", {
     for (const propertyName in newPreset) {
       const propertyValue = newPreset[propertyName];
 
-      
       this.updateProperty(propertyName, propertyValue);
     }
   },
 
   updateSynthType: function (newSynthType) {
     this.data.synthType = newSynthType;
-    this.updateSynth(); 
+    this.updateSynth();
   },
 
   updateOscillatorType: function (newOscillatorType) {
@@ -279,8 +268,7 @@ AFRAME.registerComponent("synth", {
     this.synth.set({ modulationEnvelope: { release: newModulationRelease } });
   },
 
-  
-  // update property by taking propertyName, using the map to find the update function and using the propertyValue in the updatefunction 
+  // update property by taking propertyName, using the map to find the update function and using the propertyValue in the updatefunction
   updateProperty: function (propertyName, propertyValue) {
     const propertyMap = {
       synthType: { dataKey: "synthType", updateFunc: this.updateSynth },
@@ -335,13 +323,12 @@ AFRAME.registerComponent("synth", {
 
     // check if the property name exists in thr propertyMap
     if (propertyMap.hasOwnProperty(propertyName)) {
-      
       // grab the dataKey and update function by using the property name
       const { dataKey, updateFunc } = propertyMap[propertyName];
-      
+
       // call the function
       updateFunc.call(this, propertyValue);
-      
+
       //grab the floating text element that is attatched to camera
       const floatingText = document.querySelector("#floating-text");
 
@@ -352,7 +339,7 @@ AFRAME.registerComponent("synth", {
       updateAndShowText(floatingText, `${propertyName}: ${propertyValue}`);
     }
   },
-  
+
   // getter for tone.js synth
   getSynth: function () {
     return this.synth;

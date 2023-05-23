@@ -359,7 +359,7 @@ export const presets = {
     },
   },
 
-"Glitchy Keys": {
+  "Glitchy Keys": {
     harmonicity: 1.7,
     oscillator: {
       type: "pulse",
@@ -380,5 +380,4 @@ export const presets = {
       release: 1,
     },
   },
-
 };

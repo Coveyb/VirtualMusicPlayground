@@ -144,8 +144,8 @@ AFRAME.registerComponent("wrist-menu", {
         return {
           id: name,
           text: name,
-          secondaryText:"",
-          position: `${x} ${y} 0`,
+          secondaryText: "",
+          position: `${x} ${y} 0.03`,
           width: "0.08",
           height: "0.025",
           depth: "0.005",
@@ -919,16 +919,17 @@ AFRAME.registerComponent("wrist-menu", {
 
     const homeButton = document.createElement("a-box");
     homeButton.setAttribute("id", "background");
-    homeButton.setAttribute("scale", "0.035 0.035 -0.00001");
+    homeButton.setAttribute("scale", "0.035 0.035 0.00001");
     homeButton.setAttribute("position", "0 0.13 0");
     homeButton.setAttribute("color", "#191970");
     homeButton.setAttribute("class", "clickable");
     homeButton.setAttribute("text", {
       value: "HOME",
       color: "#FFFFFF",
-      zOffset: 0.03,
+      zOffset: 0.6,
       align: "center",
       letterSpacing: 1.45,
+      width: 5,
     });
 
     homeButton.addEventListener("click", () => {
@@ -936,15 +937,6 @@ AFRAME.registerComponent("wrist-menu", {
       this.el.innerHTML = "";
       this.init();
     });
-
-    const homeButtonText = document.createElement("a-text");
-    homeButtonText.setAttribute("value", "HOME");
-    homeButtonText.setAttribute("color", "#FFFFFF");
-    homeButtonText.setAttribute("align", "center");
-    homeButtonText.setAttribute("letter-spacing", "1.45");
-    homeButtonText.setAttribute("position", "0 0 0.05");
-
-    homeButton.appendChild(homeButtonText);
 
     const bg = document.createElement("a-box");
     menuUi.appendChild(bg);

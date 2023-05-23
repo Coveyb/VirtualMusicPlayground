@@ -35,7 +35,7 @@ function createInstrumentEntity(
   return entityEl;
 }
 
-// add a new instrument to the onstruments aray and the scene
+// add a new instrument to the instruments aray and the scene
 export function spawnInstrument(type, soundSource, effects, position, scale) {
   console.log("INSIDE SPAWN INSTRUMENT");
   const id = instruments.length;
@@ -48,9 +48,9 @@ export function spawnInstrument(type, soundSource, effects, position, scale) {
     position,
     scale
   );
-  console.log(instrumentEl);
+  
   document.querySelector("a-scene").appendChild(instrumentEl);
-  console.log(document.querySelector("a-scene"));
+  
   // connect effects to synth or sampler if exists within the same entity
   const synthEl = instrumentEl.components.synth;
   if (synthEl) {
@@ -62,13 +62,13 @@ export function spawnInstrument(type, soundSource, effects, position, scale) {
   return instrumentEl.getAttribute("id");
 }
 
-// used to add effects during the initial spawning of an instruemnt and called within spawnInstrument()
+// used to connect effects to the soundsource and send to audioNode,   during the initial spawning of an instruemnt and called within spawnInstrument()
 function initAddEffects(synthEl, samplerEl, effects, instrumentEl) {
   effects.forEach((effect) => {
-    console.log(effect);
+    
 
     const effectEl = instrumentEl.components[effect];
-    console.log(effectEl);
+    
     if (effectEl && (synthEl || samplerEl)) {
       const audioNode = synthEl ? synthEl.getSynth() : samplerEl.getSampler();
 

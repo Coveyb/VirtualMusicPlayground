@@ -82,7 +82,7 @@ AFRAME.registerComponent("virtual-keyboard", {
     isChordMode: { default: false },
     isMotionControl: { default: false },
     is7thChord: { default: false },
-    arpOctave: { default: false},
+    arpOctave: { default: false },
     currentlyPressedChord: { default: [] },
   },
 
@@ -93,30 +93,7 @@ AFRAME.registerComponent("virtual-keyboard", {
     this.chordModeChord = null;
     this.arpeggiatorInterval = null;
 
-    
-    
     this.keyboardButtons = [
-      {
-        id: "arpOctave",
-
-        width: "0.35",
-        height: "0.35",
-        depth: "0.8",
-        color: "#D3D3D3",
-        wireframe: "true",
-        textColor: "black",
-        text: "Arp + 1\nOctave",
-          secondaryText: "",
-        textWidth: "1",
-        textZOffset: "0.03",
-        callback: () => {
-          this.data.arpOctave = toggleButtonColor(
-            event,
-            this.data.arpOctave,
-            "green"
-          );
-        },
-      },
       {
         id: "chordMode",
 
@@ -129,7 +106,7 @@ AFRAME.registerComponent("virtual-keyboard", {
         textWidth: "1",
         textZOffset: "0.03",
         text: "Chord Mode",
-          secondaryText: "",
+        secondaryText: "",
         wireframe: "true",
 
         callback: () => {
@@ -151,7 +128,7 @@ AFRAME.registerComponent("virtual-keyboard", {
         textColor: "black",
         textWidth: "1",
         text: "7th Chord Mode",
-          secondaryText: "",
+        secondaryText: "",
         textZOffset: "0.03",
         callback: () => {
           this.data.is7thChord = toggleButtonColor(
@@ -174,7 +151,7 @@ AFRAME.registerComponent("virtual-keyboard", {
         wireframe: "true",
         class: "clickable",
         text: "Arpeggiator",
-          secondaryText: "",
+        secondaryText: "",
 
         callback: () => {
           this.data.isArpeggiating = toggleButtonColor(
@@ -182,7 +159,27 @@ AFRAME.registerComponent("virtual-keyboard", {
             this.data.isArpeggiating,
             "pink"
           );
-          
+        },
+      },
+      {
+        id: "arpOctave",
+
+        width: "0.35",
+        height: "0.35",
+        depth: "0.8",
+        color: "#D3D3D3",
+        wireframe: "true",
+        textColor: "black",
+        text: "Arp + 1\nOctave",
+        secondaryText: "",
+        textWidth: "1",
+        textZOffset: "0.03",
+        callback: () => {
+          this.data.arpOctave = toggleButtonColor(
+            event,
+            this.data.arpOctave,
+            "green"
+          );
         },
       },
       {
@@ -194,7 +191,7 @@ AFRAME.registerComponent("virtual-keyboard", {
         color: "#D3D3D3",
         textColor: "black",
         text: "Remove Keyboard",
-          secondaryText: "",
+        secondaryText: "",
         textWidth: "1",
         textZOffset: "0.03",
         callback: () => {
@@ -210,11 +207,29 @@ AFRAME.registerComponent("virtual-keyboard", {
         color: "#D3D3D3",
         textColor: "black",
         text: "Transpose Key Up",
-          secondaryText: "",
+        secondaryText: "",
         textWidth: "1",
         textZOffset: "0.03",
         callback: () => {
           this.cycleKey("up");
+          const floatingText = document.querySelector("#floating-text");
+          updateAndShowText(floatingText, `Current key is: ${this.data.key}`);
+        },
+      },
+      {
+        id: "keyDown",
+
+        width: "0.35",
+        height: "0.35",
+        depth: "0.005",
+        color: "#D3D3D3",
+        textColor: "black",
+        textWidth: "1",
+        text: "Transpose Key Down",
+        secondaryText: "",
+        textZOffset: "0.03",
+        callback: () => {
+          this.cycleKey("down");
           const floatingText = document.querySelector("#floating-text");
           updateAndShowText(floatingText, `Current key is: ${this.data.key}`);
         },
@@ -229,7 +244,7 @@ AFRAME.registerComponent("virtual-keyboard", {
         textColor: "black",
         textWidth: "1",
         text: "Motion Control Mode",
-          secondaryText: "",
+        secondaryText: "",
         textZOffset: "0.03",
         callback: () => {
           this.data.isMotionControl = toggleButtonColor(
@@ -237,24 +252,6 @@ AFRAME.registerComponent("virtual-keyboard", {
             this.data.isMotionControl,
             "orange"
           );
-        },
-      },
-      {
-        id: "keyDown",
-
-        width: "0.35",
-        height: "0.35",
-        depth: "0.005",
-        color: "#D3D3D3",
-        textColor: "black",
-        textWidth: "1",
-        text: "Transpose Key Down",
-          secondaryText: "",
-        textZOffset: "0.03",
-        callback: () => {
-          this.cycleKey("down");
-          const floatingText = document.querySelector("#floating-text");
-          updateAndShowText(floatingText, `Current key is: ${this.data.key}`);
         },
       },
     ];
@@ -422,9 +419,9 @@ AFRAME.registerComponent("virtual-keyboard", {
   arpeggiateChord: function (speed = "8n") {
     Tone.Transport.start();
     let octaveRange = 1;
-   if (this.data.arpOctave == true) {
-     octaveRange = 2;
-   }
+    if (this.data.arpOctave == true) {
+      octaveRange = 2;
+    }
     const interval = Tone.Time(speed).toSeconds();
     const noteGap = 0.125; // gap between notes in seconds
     let index = 0;
