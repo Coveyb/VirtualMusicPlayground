@@ -40,7 +40,7 @@ AFRAME.registerComponent("audio-visualiser", {
   tick: function () {
     // use the tone.js analyzer to store the current frequency data
     const frequencyData = this.analyzer.getValue();
-    
+
     // iterate over all the cubes,the frequencyData is used to manipulate the scale of the cubes one by one based on the frequency
     for (let i = 0; i < this.cubes.length; i++) {
       // split the frequncy data over the number of cubes one by one, and storing the value
@@ -54,7 +54,6 @@ AFRAME.registerComponent("audio-visualiser", {
   runLightShow: function () {
     // set a new interval based on the bpm to give it a somewhat rhytmical effect
     this.lightShowInterval = setInterval(() => {
-      
       // set the cube colour one by one, using the getNextColour method and passing in the baseHue as a starting point
       for (let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i].el;
@@ -71,6 +70,4 @@ AFRAME.registerComponent("audio-visualiser", {
     // return the color value in HSL format with fixed saturation and lightness values
     return `hsl(${hue}, 70%, 50%)`;
   },
-
- 
 });

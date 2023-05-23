@@ -1,6 +1,5 @@
 import { removeInstrument } from "../instrument-manager.js";
 
-
 // creates the  sequencer
 function createSequencer(el) {
   const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
@@ -56,7 +55,7 @@ function createSequencer(el) {
 
         const sequencer = el;
         const currentPattern = sequencer.components.sequencer.currentPattern;
-        
+
         //set current seq data
         sequencer.components.sequencer.data.sequence[currentPattern][row][
           step
@@ -104,15 +103,15 @@ function createSequencer(el) {
   playStopButton.setAttribute("width", "1.5");
   playStopButton.setAttribute("depth", "0.5");
   playStopButton.setAttribute("height", "0.5");
-  
-  const playStopButtonText = document.createElement("a-text");
-playStopButtonText.setAttribute("value", "Play/Stop");
-  playStopButtonText.setAttribute("position", "0 -0.015 0.3");
- playStopButtonText.setAttribute("color", "black");
-playStopButtonText.setAttribute("align", "center");
 
-playStopButton.appendChild(playStopButtonText);
-  
+  const playStopButtonText = document.createElement("a-text");
+  playStopButtonText.setAttribute("value", "Play/Stop");
+  playStopButtonText.setAttribute("position", "0 -0.015 0.3");
+  playStopButtonText.setAttribute("color", "black");
+  playStopButtonText.setAttribute("align", "center");
+
+  playStopButton.appendChild(playStopButtonText);
+
   playStopButton.addEventListener("click", () => {
     if (!this.seqPlaying) {
       this.el.emit("playSequence");
@@ -125,18 +124,18 @@ playStopButton.appendChild(playStopButtonText);
   const playStopAllButton = document.createElement("a-box");
   playStopAllButton.setAttribute("class", "clickable");
   playStopAllButton.setAttribute("position", "1 0.8 0");
-     playStopAllButton.setAttribute("width", "1.5");
+  playStopAllButton.setAttribute("width", "1.5");
   playStopAllButton.setAttribute("depth", "0.5");
   playStopAllButton.setAttribute("height", "0.5");
-  
-  const playStopAllButtonText = document.createElement("a-text");
-playStopAllButtonText.setAttribute("value", "Play/Stop All");
-playStopAllButtonText.setAttribute("position", "0 -0.015 0.3");
-  playStopAllButtonText.setAttribute("color", "black");
-playStopAllButtonText.setAttribute("align", "center");
 
-playStopAllButton.appendChild(playStopAllButtonText);
-  
+  const playStopAllButtonText = document.createElement("a-text");
+  playStopAllButtonText.setAttribute("value", "Play/Stop All");
+  playStopAllButtonText.setAttribute("position", "0 -0.015 0.3");
+  playStopAllButtonText.setAttribute("color", "black");
+  playStopAllButtonText.setAttribute("align", "center");
+
+  playStopAllButton.appendChild(playStopAllButtonText);
+
   playStopAllButton.addEventListener("click", () => {
     if (!this.seqPlaying) {
       this.el.sceneEl.emit("playAllSequencers");
@@ -144,17 +143,14 @@ playStopAllButton.appendChild(playStopAllButtonText);
       this.el.sceneEl.emit("stopAllSequencers");
     }
   });
-  
-  
-  
-    const removeInstrumentButton = document.createElement("a-box");
+
+  const removeInstrumentButton = document.createElement("a-box");
   removeInstrumentButton.setAttribute("class", "clickable");
   removeInstrumentButton.setAttribute("position", "4.2 0.8 0");
   removeInstrumentButton.setAttribute("width", "0.5");
   removeInstrumentButton.setAttribute("depth", "0.2");
   removeInstrumentButton.setAttribute("height", "0.5");
-    removeInstrumentButton.setAttribute("color", "red");
-
+  removeInstrumentButton.setAttribute("color", "red");
 
   const removeInstrumentButtonText = document.createElement("a-text");
   removeInstrumentButtonText.setAttribute("value", "X");
@@ -163,12 +159,12 @@ playStopAllButton.appendChild(playStopAllButtonText);
   removeInstrumentButtonText.setAttribute("align", "center");
 
   removeInstrumentButton.appendChild(removeInstrumentButtonText);
-    parentEntity.appendChild(removeInstrumentButton);
+  parentEntity.appendChild(removeInstrumentButton);
 
   removeInstrumentButton.addEventListener("click", () => {
-    removeInstrument(this.el.id)
+    removeInstrument(this.el.id);
   });
-  
+
   const instrumentIdText = document.createElement("a-text");
   instrumentIdText.setAttribute("value", this.el.id);
   instrumentIdText.setAttribute("position", "4.5 7 0");
@@ -177,7 +173,7 @@ playStopAllButton.appendChild(playStopAllButtonText);
   instrumentIdText.setAttribute("scale", "3 3 3");
 
   el.appendChild(instrumentIdText);
-  
+
   parentEntity.appendChild(playStopAllButton);
 
   el.appendChild(parentEntity);
@@ -185,10 +181,6 @@ playStopAllButton.appendChild(playStopAllButtonText);
   parentEntity.setAttribute("rotation", "17 0 0");
 }
 // end of create sequencer function
-
-
-
-
 
 AFRAME.registerComponent("sequencer", {
   schema: {
@@ -232,11 +224,7 @@ AFRAME.registerComponent("sequencer", {
     this.el.addEventListener("stopSequence", () => {
       this.seqPlaying = false;
       this.currentStep = 0;
-           
-
     });
-
-    
 
     this.el.sceneEl.addEventListener("playAllSequencers", () => {
       if (!this.seqPlaying) {
@@ -250,12 +238,10 @@ AFRAME.registerComponent("sequencer", {
       if (this.seqPlaying) {
         this.seqPlaying = false;
         this.currentStep = 0;
-             
-
       }
     });
   },
-// plays the programmed sequence 
+  // plays the programmed sequence
   playSequence: function () {
     if (!this.seqPlaying) return;
 
@@ -281,11 +267,11 @@ AFRAME.registerComponent("sequencer", {
 
       const noteName = note.getAttribute("data-note");
 
-      // if the note is active (selected) then emit the note, 
+      // if the note is active (selected) then emit the note,
       if (isActive) {
-        // velocityOffset humanises the velocity by randomising the value slightly 
+        // velocityOffset humanises the velocity by randomising the value slightly
         const velocityOffset = Math.random() * 0.2;
-        
+
         // note duration is used by setTimeout to emit the note off and determines the length of each note
         const noteDuration = (60 / this.data.bpm) * 1000 * 0.25;
 
@@ -423,8 +409,7 @@ AFRAME.registerComponent("sequencer", {
     }, (60 / this.data.bpm) * 10000);
   },
 
-  
-  // stops the light show, so the sequencer can be used 
+  // stops the light show, so the sequencer can be used
   stopLightShow: function () {
     if (this.lightShowInterval) {
       clearInterval(this.lightShowInterval);

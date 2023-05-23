@@ -1,4 +1,4 @@
-// used by wrist nmenu to allow the user to cycle through synth parameters such as waveform and filter type 
+// used by wrist nmenu to allow the user to cycle through synth parameters such as waveform and filter type
 export function cycleThroughList(id, synthEl, list, currentValue, updateFunc) {
   const currentIndex = list.indexOf(currentValue);
   const nextIndex = (currentIndex + 1) % list.length;
@@ -31,9 +31,7 @@ export function adjustSliderValue(
     isThumbstickMoving = false;
   }, 150);
 
-  
   const currentValue = synthEl.getAttribute("synth")[sliderId];
-
 
   let step = sensitivity;
   if (yValue > 0.7) {
@@ -51,13 +49,10 @@ export function adjustSliderValue(
     newValue = max;
   }
   console.log(newValue + "NEW");
- 
+
   // pass the value to the synth element
   updateMethod.call(synthEl.components.synth, sliderId, newValue);
- 
-  
 }
-
 
 // emits the menu config update, intended for the listener within thumbstick selector
 export function emitMenuConfigUpdate(rows, columns, menuSelector, pages) {
@@ -111,15 +106,10 @@ export function createButton({
   text2.setAttribute("align", "center");
   text2.setAttribute("position", "0 0.025 0.005");
   text2.setAttribute("width", textWidth);
-  text2.setAttribute("color", "black");
-  
-  
+  text2.setAttribute("color", "#FAD02C");
 
-  
-  
   button.appendChild(text2);
 
- 
   return button;
 }
 // call create button for each button in the menu
